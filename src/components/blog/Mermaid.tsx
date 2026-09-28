@@ -101,10 +101,12 @@ export default function Mermaid({ chart }: { chart: string }) {
     setTy(0)
   }, [])
   const copyDiagram = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(chart)
-    } catch {
-      return
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(chart)
+      } catch {
+        return
+      }
     }
     setCopiedDiagram(true)
     setGlareDiagram(true)

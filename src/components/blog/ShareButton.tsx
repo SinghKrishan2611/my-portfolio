@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface ShareButtonProps {
   url: string
@@ -13,12 +13,14 @@ export default function ShareButton({ url, title }: ShareButtonProps) {
   const [supportsShare, setSupportsShare] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout>>()
 
-  useState(() => {
-    setSupportsShare(!!navigator.share)
-  })
+  useEffect(() => {
+    if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+      setSupportsShare(true)
+    }
+  }, [])
 
   const handleShare = async () => {
-    if (supportsShare) {
+    if (supportsShare && typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({ title, url })
         return
@@ -27,10 +29,12 @@ export default function ShareButton({ url, title }: ShareButtonProps) {
       }
     }
     // Clipboard fallback
-    try {
-      await navigator.clipboard.writeText(url)
-    } catch {
-      return
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(url)
+      } catch {
+        return
+      }
     }
     setCopied(true)
     setGlare(true)

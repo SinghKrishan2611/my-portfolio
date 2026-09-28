@@ -27,10 +27,12 @@ export default function TableWrapper({
       }
     })
     const text = lines.join('\n')
-    try {
-      await navigator.clipboard.writeText(text)
-    } catch {
-      return
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(text)
+      } catch {
+        return
+      }
     }
     setCopied(true)
     setGlare(true)
