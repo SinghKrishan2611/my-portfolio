@@ -101,7 +101,7 @@ export function MarkdownContent({ source }: { source: string }) {
         seg.type === 'mermaid' ? (
           <Mermaid key={i} chart={seg.content} />
         ) : (
-          <MDXRemote key={i} source={seg.content} components={components} options={mdxOptions} />
+          <MDXRemote key={i} source={seg.content} components={components} options={mdxOptions as any} />
         )
       )}
     </>
