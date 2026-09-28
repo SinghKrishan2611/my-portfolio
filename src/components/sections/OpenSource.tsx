@@ -1,0 +1,72 @@
+'use client'
+import React from 'react'
+import { motion } from 'framer-motion'
+import ScrollReveal from '@/components/ui/ScrollReveal'
+import { openSource } from '@/data/content'
+
+export default function OpenSource() {
+  return (
+    <section id="opensource" aria-label="Open Source Contributions" className="py-32 px-8 lg:px-16 border-t border-border bg-bg">
+      <div className="max-w-6xl mx-auto">
+        <ScrollReveal>
+          <div className="inline-flex border border-border px-3 py-1.5 mb-8">
+            <span className="font-mono text-xs text-muted tracking-[0.2em] uppercase">[ Open Source Contributions ]</span>
+          </div>
+          <h2 className="font-display font-semibold text-fg text-5xl lg:text-6xl leading-tight mb-16">
+            Where I contribute back<br />to the developer community.
+          </h2>
+        </ScrollReveal>
+
+        <div className="space-y-6 tile-group">
+          {openSource.map((contrib, i) => (
+            <ScrollReveal key={i} delay={i * 0.08}>
+              <motion.div
+                whileHover={{ y: -4 }}
+                className="card-hover-glare animate-tile-flicker border border-border bg-card overflow-hidden transition-shadow duration-300"
+                style={{
+                  ['--flicker-dur' as string]: `${6.5 + (i % 3) * 2}s`,
+                  ['--flicker-delay' as string]: `${(i * 2.1 + 1.0) % 9}s`,
+                } as React.CSSProperties}
+              >
+                {/* Mock terminal chrome */}
+                <div className="bg-surface border-b border-border px-4 py-3 flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-fg/10" />
+                  <div className="w-3 h-3 rounded-full bg-fg/10" />
+                  <div className="w-3 h-3 rounded-full bg-fg/10" />
+                  <span className="font-mono text-xs text-muted ml-3 select-none">
+                    ~/opensource/{contrib.title.toLowerCase().replace(/\s+/g, '-')}
+                  </span>
+                </div>
+                {/* Terminal output */}
+                <div className="bg-[#050505] px-6 py-5 font-mono text-sm text-fg/50 leading-relaxed min-h-[80px]">
+                  {contrib.terminal.split('\n').map((line, li) => (
+                    <div key={li} className={li === 0 ? 'text-fg/80' : ''}>{line}</div>
+                  ))}
+                </div>
+                {/* Card content */}
+                <div className="p-8">
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {contrib.stack.map((s) => (
+                      <span key={s} className="font-mono text-sm border border-border text-muted px-2 py-1 select-none">{s}</span>
+                    ))}
+                    <span className="font-mono text-sm text-fg/20 ml-auto self-center select-none">{contrib.year}</span>
+                  </div>
+                  <h3 className="font-display font-semibold text-fg text-2xl mb-3">{contrib.title}</h3>
+                  <p className="font-body text-base text-muted leading-relaxed mb-6">{contrib.description}</p>
+                  <div className="flex gap-4">
+                    {contrib.links.map((link) => (
+                      <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer"
+                        className="font-mono text-sm text-fg/60 hover:text-fg border border-border hover:border-fg/40 px-4 py-2 transition-all duration-200">
+                        [{link.label}]
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </ScrollReveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
